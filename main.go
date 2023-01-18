@@ -1,7 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"log"
+
+	"github.com/joho/godotenv"
+)
 
 func main() {
-    fmt.Println("Hello World!")
+	godotenv.Load()
+	server := SetupServer()
+	log.Print(server.Run(":8080"))
 }
