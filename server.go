@@ -108,6 +108,15 @@ func SetupServer() *gin.Engine {
 		id, err := strconv.ParseUint(c.Param("id"), 10, 0)
 		CheckError(err)
 
+		product, err := GetProduct(id)
+
+		if err != nil {
+			c.IndentedJSON(http.StatusNotFound, JsonApiResponse[string]{
+				Data: "product not found",
+			})
+			return
+		}
+
 		_, err = DeleteProduct(id)
 
 		if err != nil {
@@ -115,8 +124,8 @@ func SetupServer() *gin.Engine {
 				Data: "product not found",
 			})
 		} else {
-			c.IndentedJSON(http.StatusOK, JsonApiResponse[string]{
-				Data: "product deleted",
+			c.IndentedJSON(http.StatusOK, JsonApiResponse[Product]{
+				Data: product,
 			})
 		}
 	})
