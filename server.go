@@ -87,10 +87,12 @@ func SetupServer() *gin.Engine {
 		} else {
 			if postData.Name != nil {
 				product.Name = *postData.Name
-			}
-
-			if postData.Price != nil {
+			} else if postData.Price != nil {
 				product.Price = *postData.Price
+			} else {
+				c.IndentedJSON(http.StatusBadRequest, JsonApiResponse[string]{
+					Data: "\"name\" or \"price\" is required",
+				})
 			}
 
 			_, err := SaveProduct(product)
